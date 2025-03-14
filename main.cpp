@@ -36,7 +36,7 @@ vector<int> generateRandomArray(int arraySize) {
 
 void displayHistogram(const vector<int>& arr, int pivotIndex = -1, int left = -1, 
                       int right = -1, int swapTarget = -1, const vector<bool>& finalized = {}) {
-    // clearScreen();
+    clearScreen();
 
     int maxVal = 10;
     bool highlightPivot = pivotIndex != -1;    
@@ -74,22 +74,23 @@ void displayHistogram(const vector<int>& arr, int pivotIndex = -1, int left = -1
     for (int num : arr) cout << num << " ";
     cout << endl;
 
-    // this_thread::sleep_for(chrono::milliseconds(1000)); // Delay for visualization
+    this_thread::sleep_for(chrono::milliseconds(500)); // Delay for visualization
 }
 
 int partition(vector<int>& arr, int low, int high, vector<bool>& finalized) {
     int pivotIndex = low + (high - low) / 2; // Middle element as pivot
     int pivotValue = arr[pivotIndex];
 
-    cout << "\nPivot Selected: " << RED << pivotValue << RESET << "\n";
+    // cout << "\nPivot Selected: " << RED << pivotValue << RESET << "\n";
+    // Display pivot selected
     displayHistogram(arr, pivotIndex, -1, -1, -1, finalized);
     
-    cout << "\nMove pivot to end\n";
+    // Move pivot to end
     displayHistogram(arr, pivotIndex, -1, -1, high, finalized);
 
     swap(arr[pivotIndex], arr[high]); // Move pivot to end temporarily
     
-    cout << "\nAfter swapping pivot\n";
+    // Dipslay after swapping pivot
     displayHistogram(arr, high, -1, -1, pivotIndex, finalized);
     
     pivotIndex = high; 
@@ -97,45 +98,36 @@ int partition(vector<int>& arr, int low, int high, vector<bool>& finalized) {
     int left = low, 
         right = high - 1;
     
-    cout << "\nFirst time showing left and right pointers\n";
+    // First time showing left and right pointers
     displayHistogram(arr, pivotIndex, left, right, -1, finalized);
 
     while (left <= right) {
         while (left <= right && arr[left] < pivotValue) {
-            cout << "\nShowing left and right pointers\n";
             displayHistogram(arr, pivotIndex, left, right, -1, finalized);
-            
-            cout << "\nleft is moving up\n";
             left++;
         }
         while (left <= right && arr[right] > pivotValue) {
-            cout << "\nShowing left and right pointers\n";
             displayHistogram(arr, pivotIndex, left, right, -1, finalized);
-            
-            cout << "\nright is moving down\n";
             right--;
         }
         if (left <= right) {
-            cout << "\nAfter swapping left and right pointers\n";
             swap(arr[left], arr[right]);
             displayHistogram(arr, pivotIndex, left, right, -1, finalized);
-            
             left++;
             right--;
         }
     }
-    cout << "\nAfter looping\n";
+    // Display after looping
     displayHistogram(arr, pivotIndex, left, right, -1, finalized);
     
-    cout << "\nSelecting column to switch with pivot\n";
+    // Display which column to switch with pivot
     displayHistogram(arr, pivotIndex, -1, -1, left, finalized);
 
-    cout << "\nMove pivot to correct place\n";
     swap(arr[left], arr[pivotIndex]); // Move pivot to its correct place
     displayHistogram(arr, left, -1, -1, pivotIndex, finalized);
     
     finalized[left] = true; // Mark pivot as finalized
-    cout << "\nAfter pivot finalized\n";
+    // Display pivot in finalized position
     displayHistogram(arr, left, -1, -1, -1, finalized);
     
     return left;
@@ -152,7 +144,7 @@ void quickSort(vector<int>& arr, int low, int high, vector<bool>& finalized) {
 
 int main() {
 
-    int arraySize = 7;
+    int arraySize = 10;
     vector<int> arr = generateRandomArray(arraySize);
     vector<bool> finalized(arraySize, false); // To track finalized elements
 
